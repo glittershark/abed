@@ -1,0 +1,13 @@
+flags: {}
+extra-package-dbs: []
+packages:
+- '.'
+- location:
+    git: git@github.com:glittershark/compdata.git
+    commit: 78c10e245056f006a51a070be2a02c5049733f68
+  extra-dep: true
+extra-deps:
+- compdata-0.11.0
+- derive-2.6.2
+- tree-view-0.5
+resolver: lts-8.6

@@ -1,0 +1,3 @@
+:load src/Prelude.hs
+import Prelude
+:set -XImplicitPrelude

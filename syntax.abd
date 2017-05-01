@@ -1,0 +1,40 @@
+-- some syntax examples
+
+.sig handle = Request -> IO Response
+.def handle req = .match path req with {
+  "/" = point $ text_resp "Hello, Abed!"
+  ?   = point $ text_resp "Not Found"
+}
+
+.type TopLevel = Program ()
+
+.sig `->` = Type -> Type -> Type
+.special_form `->`
+
+.private sig_from
+.sig sig_from = [Ident] -> Type -> Type
+.def sig_from (i :: is) retType = i -> sig_from is retType
+.def sig_from [] retType        = retType
+
+.sig def :  forall ret.
+            (name : Ident)
+         -> (args : * Ident)
+         -> Literal "="
+         -> (body : *> Expr ret)
+         -> (top  : TopLevel | hasDef top name &&
+                               (sig top name = sig_from args top))
+.macro def name args body = .do {
+  the_sig = lookup_sig name
+}
+
+{-
+
+(macroinvoke sig (= (handle)
+                    ((invoke -> Request IO Response))))
+(macroinvoke def (= (invoke handle req)
+                    (macroinvoke match path req with 
+                                 (block 
+                                   (= "/" (invoke (invoke $ point) (invoke (text_resp "Hello, Abed!"))))
+                                   (= ?   (invoke (invoke $ point) (invoke (text_resp "Not Found"))))))))
+
+-}
